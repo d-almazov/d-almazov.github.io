@@ -25,6 +25,11 @@
     | minify
     | fingerprint -}}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+  {{- if .Params.math }}
+    {{- $mathConfig := resources.Get "js/math-config.js" | minify | fingerprint -}}
+    <script src="{{ $mathConfig.RelPermalink }}" integrity="{{ $mathConfig.Data.Integrity }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" defer></script>
+  {{- end }}
 </head>
 <body>
   <a class="skip-link" href="#main-content">Перейти до основного вмісту</a>

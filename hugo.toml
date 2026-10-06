@@ -1,4 +1,4 @@
-baseURL = "https://example.github.io/digital-classroom/"
+baseURL = "https://d-almazov.github.io/"
 locale = "uk-UA"
 defaultContentLanguage = "uk"
 title = "Особистий університет"
@@ -16,6 +16,11 @@ disableKinds = ["taxonomy", "term"]
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = false
+    [markup.goldmark.extensions.passthrough]
+      enable = true
+      [markup.goldmark.extensions.passthrough.delimiters]
+        block = [['\[', '\]'], ['$$', '$$']]
+        inline = [['\(', '\)'], ['$', '$']]
 
 [menus]
   [[menus.main]]
