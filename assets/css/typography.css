@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --background: #f8f7f3;
   --surface: #ffffff;
   --surface-muted: #efeee8;
@@ -18,8 +18,25 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #121714;
+  --surface: #1a211d;
+  --surface-muted: #202923;
+  --text: #edf2ee;
+  --muted: #aab6ae;
+  --border: #39443d;
+  --accent: #75c5a5;
+  --accent-strong: #9bd8c0;
+  --accent-soft: #253e34;
+  --code-bg: #0c110e;
+  --code-text: #edf5f0;
+  --focus: #f4aa68;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
+    color-scheme: dark;
     --background: #121714;
     --surface: #1a211d;
     --surface-muted: #202923;

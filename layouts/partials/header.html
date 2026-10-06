@@ -4,6 +4,12 @@
       <span class="brand-mark" aria-hidden="true">ОУ</span>
       <span>{{ site.Title }}</span>
     </a>
-    {{ partial "main-navigation.html" . }}
+    <div class="header-actions">
+      {{ partial "main-navigation.html" . }}
+      <label class="theme-toggle">
+        <input type="checkbox" data-theme-toggle aria-label="Перемкнути тему">
+        <span class="theme-toggle__track" aria-hidden="true"></span>
+      </label>
+    </div>
   </div>
 </header>

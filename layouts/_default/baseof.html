@@ -25,6 +25,15 @@
     | minify
     | fingerprint -}}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+  <script>
+    (() => {
+      const stored = localStorage.getItem("theme");
+      const theme = stored === "light" || stored === "dark"
+        ? stored
+        : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
   {{- if .Params.math }}
     {{- $mathConfig := resources.Get "js/math-config.js" | minify | fingerprint -}}
     <script src="{{ $mathConfig.RelPermalink }}" integrity="{{ $mathConfig.Data.Integrity }}"></script>
@@ -38,6 +47,8 @@
     {{ block "main" . }}{{ end }}
   </main>
   {{ partial "footer.html" . }}
+  {{- $themeScript := resources.Get "js/theme-toggle.js" | minify | fingerprint -}}
+  <script src="{{ $themeScript.RelPermalink }}" integrity="{{ $themeScript.Data.Integrity }}" defer></script>
   {{- if .Store.Get "hasPythonExercise" }}
     {{- $exerciseScript := resources.Get "js/python-exercises.js" | minify | fingerprint -}}
     <script src="{{ $exerciseScript.RelPermalink }}" integrity="{{ $exerciseScript.Data.Integrity }}" defer></script>

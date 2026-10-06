@@ -246,8 +246,15 @@
   }
 }
 
+:root[data-theme="dark"] .python-exercise {
+  --exercise-error: #f2a19a;
+  --exercise-error-bg: #3c2422;
+  --exercise-success: #91d4b1;
+  --exercise-success-bg: #1c382b;
+}
+
 @media (prefers-color-scheme: dark) {
-  .python-exercise {
+  :root:not([data-theme]) .python-exercise {
     --exercise-error: #f2a19a;
     --exercise-error-bg: #3c2422;
     --exercise-success: #91d4b1;
