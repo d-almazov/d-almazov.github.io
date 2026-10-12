@@ -1,0 +1,3 @@
+{{- /* Ukrainian plural: partial "plural.html" (dict "n" 5 "one" "лекція" "few" "лекції" "many" "лекцій") */ -}}
+{{- $n := int .n -}}{{- $m10 := mod $n 10 -}}{{- $m100 := mod $n 100 -}}
+{{- if and (eq $m10 1) (ne $m100 11) -}}{{ .one }}{{- else if and (ge $m10 2) (le $m10 4) (or (lt $m100 12) (gt $m100 14)) -}}{{ .few }}{{- else -}}{{ .many }}{{- end -}}

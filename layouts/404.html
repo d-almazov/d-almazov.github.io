@@ -1,0 +1,25 @@
+{{ define "main" }}
+<section class="container not-found">
+  <svg class="not-found__art" viewBox="0 0 320 150" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path pathLength="1" d="M10 60 H44"/><path pathLength="1" d="M38 55 l6 5 -6 5"/>
+    <circle pathLength="1" cx="56" cy="60" r="12"/>
+    <path pathLength="1" d="M68 60 H100"/><path pathLength="1" d="M94 55 l6 5 -6 5"/>
+    <rect pathLength="1" x="100" y="38" width="56" height="44" rx="6"/>
+    <path pathLength="1" d="M156 60 H188"/><path pathLength="1" d="M182 55 l6 5 -6 5"/>
+    <rect pathLength="1" x="188" y="38" width="56" height="44" rx="6"/>
+    <path pathLength="1" d="M244 60 H306"/>
+    <path pathLength="1" d="M280 60 V118 H200"/>
+    <path pathLength="1" d="M160 118 H56 V72"/>
+    <path class="not-found__gap" d="M188 110 l-8 16 M172 110 l-8 16" stroke-width="2"/>
+    <text x="128" y="66" text-anchor="middle" class="illo-text">404</text>
+    <text x="216" y="66" text-anchor="middle" class="illo-text">?</text>
+  </svg>
+  <p class="eyebrow">Помилка 404</p>
+  <h1>Сторінку не знайдено</h1>
+  <p class="lead">Схоже, зворотний зв'язок розірвався: такої сторінки немає або її перенесли.</p>
+  <div class="button-group">
+    <a class="button button--primary" href="{{ site.Home.RelPermalink }}">На головну {{ partial "icon.html" (dict "name" "arrow-right") }}</a>
+    <a class="button button--secondary" href="{{ (site.GetPage "/courses").RelPermalink }}">До курсів</a>
+  </div>
+</section>
+{{ end }}

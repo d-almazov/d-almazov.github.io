@@ -1,36 +1,45 @@
 {{- $current := . -}}
-{{- $course := . -}}
-{{- /* Resolve the course by walking ancestors; course pages carry level metadata. */ -}}
-{{- range $current.Ancestors }}
-  {{- if .Params.level }}{{ $course = . }}{{ end }}
-{{- end }}
+{{- $course := partial "course-of.html" . -}}
+{{- $subject := partial "subject-of.html" $course -}}
+{{- $lecturesSection := $course.GetPage "lectures" -}}
+{{- $inLectures := and $lecturesSection (or (eq $current $lecturesSection) (eq $current.Parent $lecturesSection)) -}}
 <aside class="course-sidebar" aria-label="Навігація курсу">
-  <details class="course-nav">
-    <summary>Навігація курсу</summary>
+  <details class="course-nav" open data-course-nav>
+    <summary>{{ partial "icon.html" (dict "name" "list") }}<span>Зміст курсу</span>{{ partial "icon.html" (dict "name" "chevron-right" "class" "course-nav__chevron") }}</summary>
     <div class="course-nav__inner">
-      <p class="course-nav__eyebrow">Курс</p>
-      <a class="course-nav__title" href="{{ $course.RelPermalink }}">{{ $course.Params.shortTitle | default $course.Title }}</a>
+      <a class="course-nav__course" href="{{ $course.RelPermalink }}">
+        <span class="course-nav__icon tag--{{ $subject.color }}" aria-hidden="true">{{ partial "icon.html" (dict "name" $subject.icon) }}</span>
+        <span>
+          <small>Курс</small>
+          {{ $course.Params.shortTitle | default $course.Title }}
+        </span>
+      </a>
       <nav aria-label="Розділи курсу">
         <ul>
-          <li><a href="{{ $course.RelPermalink }}"{{ if eq $current.RelPermalink $course.RelPermalink }} aria-current="page"{{ end }}>Огляд</a></li>
+          <li><a href="{{ $course.RelPermalink }}"{{ if eq $current $course }} aria-current="page"{{ end }}>{{ partial "icon.html" (dict "name" "home") }}Огляд</a></li>
           {{ with $course.GetPage "syllabus" }}
-            <li><a href="{{ .RelPermalink }}"{{ if eq $current.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>Силабус</a></li>
+            <li><a href="{{ .RelPermalink }}"{{ if eq $current . }} aria-current="page"{{ end }}>{{ partial "icon.html" (dict "name" "compass") }}Силабус</a></li>
           {{ end }}
-          {{ with $course.GetPage "lectures" }}
+          {{ with $lecturesSection }}
             <li>
-              <a href="{{ .RelPermalink }}"{{ if eq $current.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>Лекції</a>
-              <ol class="course-nav__lessons">
-                {{ range .RegularPages.ByWeight }}
-                  <li><a href="{{ .RelPermalink }}"{{ if eq $current.RelPermalink .RelPermalink }} aria-current="page"{{ end }}><span>{{ printf "%02d" .Weight }}</span>{{ .Title }}</a></li>
-                {{ end }}
-              </ol>
+              <details class="course-nav__group"{{ if or $inLectures (eq $current $course) }} open{{ end }}>
+                <summary>
+                  {{ partial "icon.html" (dict "name" "chevron-right" "class" "course-nav__toggle") }}
+                  <a href="{{ .RelPermalink }}"{{ if eq $current . }} aria-current="page"{{ end }}>{{ partial "icon.html" (dict "name" "book") }}Лекції<span class="course-nav__count">{{ len .RegularPages }}</span></a>
+                </summary>
+                <ol class="course-nav__lessons">
+                  {{ range .RegularPages.ByWeight }}
+                    <li><a href="{{ .RelPermalink }}"{{ if eq $current . }} aria-current="page"{{ end }}><span>{{ printf "%02d" .Weight }}</span>{{ .Title }}</a></li>
+                  {{ end }}
+                </ol>
+              </details>
             </li>
           {{ end }}
           {{ with $course.GetPage "assignments" }}
-            <li><a href="{{ .RelPermalink }}"{{ if eq $current.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>Завдання</a></li>
+            <li><a href="{{ .RelPermalink }}"{{ if or (eq $current .) (eq $current.Parent .) }} aria-current="page"{{ end }}>{{ partial "icon.html" (dict "name" "check") }}Завдання<span class="course-nav__count">{{ len .RegularPages }}</span></a></li>
           {{ end }}
           {{ with $course.GetPage "resources" }}
-            <li><a href="{{ .RelPermalink }}"{{ if eq $current.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>Ресурси</a></li>
+            <li><a href="{{ .RelPermalink }}"{{ if eq $current . }} aria-current="page"{{ end }}>{{ partial "icon.html" (dict "name" "link") }}Ресурси</a></li>
           {{ end }}
         </ul>
       </nav>

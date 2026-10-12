@@ -1,0 +1,19 @@
+{{- /*
+  Notion-style callout.
+  {{< callout type="tip" title="Порада" >}} Текст **markdown** {{< /callout >}}
+  type: tip | info | warning | note
+*/ -}}
+{{- $type := .Get "type" | default "note" -}}
+{{- $map := dict
+  "tip" (dict "icon" "lightbulb" "color" "yellow")
+  "info" (dict "icon" "info" "color" "blue")
+  "warning" (dict "icon" "alert" "color" "orange")
+  "note" (dict "icon" "file" "color" "gray") -}}
+{{- $cfg := index $map $type | default (index $map "note") -}}
+<div class="callout callout--{{ $cfg.color }}" role="note">
+  <span class="callout__icon" aria-hidden="true">{{ partial "icon.html" (dict "name" $cfg.icon) }}</span>
+  <div class="callout__body">
+    {{ with .Get "title" }}<strong class="callout__title">{{ . }}</strong>{{ end }}
+    {{ .InnerDeindent | .Page.RenderString (dict "display" "block") }}
+  </div>
+</div>

@@ -1,0 +1,6 @@
+{{- /* Returns the course page (the ancestor that carries `level`) for any page inside a course. */ -}}
+{{- $course := . -}}
+{{- if not .Params.level -}}
+  {{- range .Ancestors -}}{{- if .Params.level -}}{{- $course = . -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- return $course -}}

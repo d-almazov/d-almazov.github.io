@@ -9,14 +9,7 @@
   {{ with .Content }}<div class="prose section-intro">{{ . }}</div>{{ end }}
   <div class="notes-list">
     {{ range .RegularPages.ByDate.Reverse }}
-      <article class="note-row">
-        {{ if not .Date.IsZero }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>{{ end }}
-        <div>
-          <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-          {{ with .Description }}<p>{{ . }}</p>{{ end }}
-        </div>
-        <span aria-hidden="true">→</span>
-      </article>
+      {{ partial "note-row.html" (dict "page" . "heading" "h2") }}
     {{ end }}
   </div>
 </div>

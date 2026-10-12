@@ -1,13 +1,14 @@
 baseURL = "https://d-almazov.github.io/"
 locale = "uk-UA"
 defaultContentLanguage = "uk"
-title = "Особистий університет"
+title = "Особистий сайт викладача"
 enableRobotsTXT = true
 disableKinds = ["taxonomy", "term"]
 
 [params]
-  description = "Навчальні курси, лекції та нотатки викладача."
-  author = "Ім'я Прізвище"
+  description = "Денис Алмазов — викладач програмування (Python, MATLAB, Simulink), теорії автоматичного керування, промислової автоматизації та вбудованих систем. Курси, лекції та навчальні матеріали."
+  author = "Денис Алмазов"
+  authorFull = "Алмазов Денис Олегович"
 
 [markup]
   [markup.highlight]
@@ -46,3 +47,8 @@ disableKinds = ["taxonomy", "term"]
 
 [pagination]
   pagerSize = 10
+
+[markup.tableOfContents]
+  startLevel = 2
+  endLevel = 3
+  ordered = false

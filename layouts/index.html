@@ -1,74 +1,162 @@
 {{ define "main" }}
+{{- $courses := site.GetPage "/courses" -}}
+{{- $about := site.GetPage "/about" -}}
+{{- $notes := site.GetPage "/notes" -}}
+{{- $lectureCount := 0 -}}
+{{- range $courses.Sections }}{{ with .GetPage "lectures" }}{{ $lectureCount = add $lectureCount (len .RegularPages) }}{{ end }}{{ end -}}
+{{- $photo := resources.Get "images/denys-almazov.jpg" -}}
+
+<!-- ============ HERO ============ -->
 <section class="hero">
   <div class="container hero__grid">
-    <div>
-      <p class="eyebrow">Особистий навчальний простір</p>
-      <h1>Ім'я Прізвище</h1>
-      <p class="hero__role">Викладач та автор навчальних курсів</p>
-      <p class="hero__intro">Допомагаю системно розібратися в програмуванні, математиці та алгоритмах.</p>
-      <div class="button-group">
-        <a class="button button--primary" href="{{ (site.GetPage "/courses").RelPermalink }}">Переглянути курси</a>
-        <a class="button button--secondary" href="{{ (site.GetPage "/about").RelPermalink }}">Про мене</a>
+    <div class="hero__text">
+      <p class="eyebrow hero-in" style="--d:0">Викладач програмування та автоматизації</p>
+      <h1 class="hero__title">
+        <span class="hero-line"><span class="hero-in" style="--d:1">Денис</span></span>
+        <span class="hero-line"><span class="hero-in" style="--d:2">Алмазов</span></span>
+      </h1>
+      <p class="hero__intro hero-in" style="--d:3">
+        Курси, лекції, практичні завдання та корисні матеріали для моїх студентів і всіх, хто вивчає програмування та автоматизацію.
+      </p>
+      <div class="button-group hero-in" style="--d:4">
+        <a class="button button--primary" data-magnetic href="{{ $courses.RelPermalink }}">Переглянути курси {{ partial "icon.html" (dict "name" "arrow-right") }}</a>
+        <a class="button button--secondary" href="{{ $about.RelPermalink }}">Про мене</a>
       </div>
+      <dl class="hero__stats hero-in" style="--d:5">
+        <div><dt>Курси</dt><dd>{{ len $courses.Sections }}</dd></div>
+        <div><dt>Лекції</dt><dd>{{ $lectureCount }}</dd></div>
+        <div><dt>Напрями</dt><dd>{{ len site.Data.subjects }}</dd></div>
+      </dl>
     </div>
-    <div class="hero__note" aria-label="Принципи навчання">
-      <span>01</span>
-      <p>Зрозуміла теорія</p>
-      <span>02</span>
-      <p>Послідовна практика</p>
-      <span>03</span>
-      <p>Самостійне мислення</p>
+
+    <div class="hero__portrait hero-in" style="--d:2">
+      <div class="portrait">
+        <svg class="portrait__ring" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <path pathLength="1" d="M200 14 C306 12 388 92 386 200 C384 306 302 388 196 386 C92 384 12 304 16 196 C20 104 84 30 176 18 C190 16 214 16 228 20"/>
+        </svg>
+        {{ with $photo }}
+          {{ $img := .Fill "640x640 Center q86" }}
+          {{ $img2 := .Fill "360x360 Center q84" }}
+          <img class="portrait__img" src="{{ $img.RelPermalink }}" srcset="{{ $img2.RelPermalink }} 360w, {{ $img.RelPermalink }} 640w" sizes="(max-width: 48rem) 70vw, 380px" width="640" height="640" alt="Денис Алмазов" fetchpriority="high">
+        {{ end }}
+        <span class="chip tag tag--yellow" style="--x:-6%;--y:12%;--d:0s">{{ partial "icon.html" (dict "name" "code") }}Python</span>
+        <span class="chip tag tag--pink" style="--x:78%;--y:4%;--d:-1.4s">{{ partial "icon.html" (dict "name" "workflow") }}Simulink</span>
+        <span class="chip tag tag--blue" style="--x:86%;--y:58%;--d:-2.6s">{{ partial "icon.html" (dict "name" "activity") }}ПІД</span>
+        <span class="chip tag tag--green" style="--x:-10%;--y:70%;--d:-0.8s">{{ partial "icon.html" (dict "name" "factory") }}ПЛК</span>
+        <span class="chip tag tag--purple" style="--x:46%;--y:94%;--d:-2s">{{ partial "icon.html" (dict "name" "cpu") }}ESP32</span>
+        <svg class="portrait__spark portrait__spark--a" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg class="portrait__spark portrait__spark--b" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- ============ MARQUEE ============ -->
+{{- $words := slice "Python" "MATLAB" "Simulink" "Передавальні функції" "ПІД-регулятори" "Простір станів" "Частотний аналіз" "ПЛК" "SCADA" "Arduino" "ESP32" "Simscape" -}}
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    {{ range seq 2 }}
+      <div class="marquee__group">
+        {{ range $words }}<span>{{ . }}</span><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>{{ end }}
+      </div>
+    {{ end }}
+  </div>
+</div>
+
+<!-- ============ APPROACH (animated step response) ============ -->
+<section class="section container" aria-labelledby="approach-title">
+  <div class="approach" data-reveal>
+    <div class="approach__text">
+      <p class="eyebrow">Як побудовані курси</p>
+      <h2 id="approach-title">Теорія, симуляція, практика</h2>
+      <p>Спочатку розбираємося, як працює система і як описати її рівняннями. Потім перевіряємо все в MATLAB і Simulink. А наприкінці запускаємо на справжньому контролері або мікроконтролері.</p>
+      <ol class="approach__steps">
+        <li><span>01</span><div><strong>Модель</strong><small>рівняння та передавальні функції</small></div></li>
+        <li><span>02</span><div><strong>Симуляція</strong><small>MATLAB і Simulink</small></div></li>
+        <li><span>03</span><div><strong>Залізо</strong><small>ПЛК і мікроконтролери</small></div></li>
+      </ol>
+    </div>
+    <figure class="approach__chart">
+      <div class="approach__formula"><code>G(s) = ω²ₙ / (s² + 2ζωₙs + ω²ₙ)</code><span class="tag tag--blue">ζ = 0.3</span></div>
+      {{ partial "illustrations/step-response.html" . }}
+    </figure>
+  </div>
+</section>
+
+<!-- ============ SUBJECTS ============ -->
+<section class="section section--tinted" aria-labelledby="subjects-title">
+  <div class="container">
+    <div class="section-heading" data-reveal>
+      <div>
+        <p class="eyebrow">Напрями</p>
+        <h2 id="subjects-title">Що я викладаю</h2>
+      </div>
+      <p>Від основ програмування до промислових систем: кожен напрям спирається на попередній.</p>
+    </div>
+    <div class="subject-grid">
+      {{ range $i, $s := site.Data.subjects }}
+        <article class="subject" data-reveal data-tilt style="--i:{{ $i }}">
+          <div class="subject__art subject__art--{{ $s.color }}">
+            {{ partial (printf "illustrations/%s.html" $s.key) . }}
+          </div>
+          <div class="subject__body">
+            <div class="subject__meta">
+              <span class="tag tag--{{ $s.color }}">{{ partial "icon.html" (dict "name" $s.icon) }}{{ $s.group }}</span>
+              {{ if $s.soon }}<span class="status status--draft">Скоро</span>{{ end }}
+            </div>
+            <h3>{{ if $s.link }}<a href="{{ $s.link | relURL }}">{{ $s.title }}</a>{{ else }}{{ $s.title }}{{ end }}</h3>
+            <p>{{ $s.description }}</p>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<!-- ============ COURSES ============ -->
 <section class="section container" aria-labelledby="courses-title">
-  <div class="section-heading">
+  <div class="section-heading" data-reveal>
     <div>
       <p class="eyebrow">Навчальні програми</p>
-      <h2 id="courses-title">Актуальні курси</h2>
+      <h2 id="courses-title">Курси</h2>
     </div>
-    <a class="arrow-link" href="{{ (site.GetPage "/courses").RelPermalink }}">Усі курси <span aria-hidden="true">→</span></a>
+    <a class="arrow-link" href="{{ $courses.RelPermalink }}">Усі курси {{ partial "icon.html" (dict "name" "arrow-right") }}</a>
   </div>
   <div class="course-grid">
-    {{ range (site.GetPage "/courses").Sections.ByWeight }}
+    {{ range $courses.Sections.ByWeight }}
       {{ partial "course-card.html" . }}
     {{ end }}
   </div>
 </section>
 
-<section class="section section--tinted">
-  <div class="container about-callout">
-    <div>
-      <p class="eyebrow">Про викладача</p>
-      <h2>Навчання з опорою на розуміння</h2>
-    </div>
-    <div>
-      <p>Це демонстраційний сайт умовного викладача. Його структура створена для відкритих курсів, де теорія пов'язана з практикою, а кожна тема має чітке місце в програмі.</p>
-      <a class="arrow-link" href="{{ (site.GetPage "/about").RelPermalink }}">Докладніше про підхід <span aria-hidden="true">→</span></a>
+<!-- ============ ABOUT ============ -->
+<section class="section section--quote" aria-labelledby="hello-title">
+  <div class="container quote" data-reveal>
+    <p class="eyebrow">Про мене</p>
+    <h2 id="hello-title" class="quote__text">Привіт! Я Денис. Викладаю програмування, теорію автоматичного керування та автоматизацію.</h2>
+    <p class="quote__sub">Тут зібрані мої курси, лекції та матеріали до занять. Усе у відкритому доступі: можна вчитися у своєму темпі.</p>
+    <div class="quote__author">
+      {{ with $photo }}{{ $s := .Fill "96x96 Center q80" }}<img src="{{ $s.RelPermalink }}" width="48" height="48" alt="" loading="lazy">{{ end }}
+      <div><strong>{{ site.Params.authorFull }}</strong><a class="arrow-link" href="{{ $about.RelPermalink }}">Детальніше про мене {{ partial "icon.html" (dict "name" "arrow-right") }}</a></div>
     </div>
   </div>
 </section>
 
+<!-- ============ NOTES ============ -->
+{{ with $notes }}{{ if .RegularPages }}
 <section class="section container" aria-labelledby="notes-title">
-  <div class="section-heading">
+  <div class="section-heading" data-reveal>
     <div>
       <p class="eyebrow">Останні публікації</p>
       <h2 id="notes-title">Нотатки</h2>
     </div>
-    <a class="arrow-link" href="{{ (site.GetPage "/notes").RelPermalink }}">Усі нотатки <span aria-hidden="true">→</span></a>
+    <a class="arrow-link" href="{{ .RelPermalink }}">Усі нотатки {{ partial "icon.html" (dict "name" "arrow-right") }}</a>
   </div>
-  <div class="notes-list">
-    {{ range first 3 (site.GetPage "/notes").RegularPages.ByDate.Reverse }}
-      <article class="note-row">
-        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
-        <div>
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          <p>{{ .Description }}</p>
-        </div>
-        <span aria-hidden="true">→</span>
-      </article>
+  <div class="notes-list" data-reveal>
+    {{ range first 3 .RegularPages.ByDate.Reverse }}
+      {{ partial "note-row.html" (dict "page" .) }}
     {{ end }}
   </div>
 </section>
+{{ end }}{{ end }}
 {{ end }}

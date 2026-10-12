@@ -1,16 +1,17 @@
+{{- /* Hugo's .NextInSection points to the previous item in weight order. */ -}}
 {{- if or .PrevInSection .NextInSection }}
 <nav class="lesson-pagination" aria-label="Навігація між матеріалами">
-  <div>
-    {{ with .NextInSection }}
-      <span>Попередній матеріал</span>
-      <a rel="prev" href="{{ .RelPermalink }}"><span aria-hidden="true">←</span> {{ .Title }}</a>
-    {{ end }}
-  </div>
-  <div class="lesson-pagination__next">
-    {{ with .PrevInSection }}
-      <span>Наступний матеріал</span>
-      <a rel="next" href="{{ .RelPermalink }}">{{ .Title }} <span aria-hidden="true">→</span></a>
-    {{ end }}
-  </div>
+  {{ with .NextInSection }}
+    <a class="lesson-pagination__card" rel="prev" href="{{ .RelPermalink }}">
+      <span class="lesson-pagination__label">{{ partial "icon.html" (dict "name" "chevron-left") }}Попередній</span>
+      <strong>{{ .Title }}</strong>
+    </a>
+  {{ else }}<span></span>{{ end }}
+  {{ with .PrevInSection }}
+    <a class="lesson-pagination__card lesson-pagination__card--next" rel="next" href="{{ .RelPermalink }}">
+      <span class="lesson-pagination__label">Наступний{{ partial "icon.html" (dict "name" "chevron-right") }}</span>
+      <strong>{{ .Title }}</strong>
+    </a>
+  {{ end }}
 </nav>
 {{- end }}

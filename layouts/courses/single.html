@@ -3,13 +3,9 @@
   {{ partial "breadcrumbs.html" . }}
   <div class="course-layout">
     {{ partial "course-navigation.html" . }}
-    <article class="course-main prose">
-      <header class="page-header page-header--compact">
-        <p class="eyebrow">Матеріал курсу</p>
-        <h1>{{ .Title }}</h1>
-        {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
-      </header>
-      {{ .Content }}
+    <article class="course-main">
+      {{ partial "article-header.html" (dict "page" . "label" "Матеріал курсу") }}
+      <div class="prose">{{ .Content }}</div>
     </article>
   </div>
 </div>

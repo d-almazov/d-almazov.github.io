@@ -1,0 +1,14 @@
+{{- /* One row in a Notion-like list of course materials. */ -}}
+{{- $p := .page -}}
+<article class="material-row" data-reveal style="--i:{{ .i | default 0 }}">
+  <span class="material-row__num">{{ printf "%02d" $p.Weight }}</span>
+  <div class="material-row__body">
+    <h2><a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a></h2>
+    {{ with $p.Description }}<p>{{ . }}</p>{{ end }}
+  </div>
+  <div class="material-row__meta">
+    {{ with $p.Params.due }}<span class="tag tag--orange">{{ partial "icon.html" (dict "name" "calendar") }}{{ . }}</span>{{ end }}
+    {{ if .showTime }}<span class="material-row__time">{{ partial "icon.html" (dict "name" "clock") }}{{ $p.ReadingTime }} хв</span>{{ end }}
+    {{ partial "icon.html" (dict "name" "arrow-right" "class" "material-row__arrow") }}
+  </div>
+</article>

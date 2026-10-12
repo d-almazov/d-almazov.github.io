@@ -4,7 +4,7 @@ shortTitle: "Алгоритми"
 description: "Практичний вступ до аналізу алгоритмів і базових структур даних."
 level: "Середній"
 duration: "12 тижнів"
-instructor: "Ім'я Прізвище"
+instructor: "Денис Алмазов"
 semester: "Осінь 2026"
 status: "У розробці"
 weight: 20

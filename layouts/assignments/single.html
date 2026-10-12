@@ -3,14 +3,9 @@
   {{ partial "breadcrumbs.html" . }}
   <div class="course-layout">
     {{ partial "course-navigation.html" . }}
-    <article class="course-main prose">
-      <header class="page-header page-header--compact">
-        <p class="eyebrow">Практичне завдання {{ printf "%02d" .Weight }}</p>
-        <h1>{{ .Title }}</h1>
-        {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
-        {{ with .Params.due }}<p class="assignment-due">Рекомендований термін: {{ . }}</p>{{ end }}
-      </header>
-      {{ .Content }}
+    <article class="course-main">
+      {{ partial "article-header.html" (dict "page" . "label" (printf "Завдання %02d" .Weight) "icon" "check") }}
+      <div class="prose">{{ .Content }}</div>
       {{ partial "pagination.html" . }}
     </article>
   </div>

@@ -1,0 +1,12 @@
+{{- $heading := .heading | default "h3" -}}
+{{- with .page -}}
+<article class="note-row">
+  <span class="note-row__icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "file") }}</span>
+  <div>
+    {{ printf "<%s>" $heading | safeHTML }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ printf "</%s>" $heading | safeHTML }}
+    {{ with .Description }}<p>{{ . }}</p>{{ end }}
+  </div>
+  {{ if not .Date.IsZero }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>{{ else }}<span></span>{{ end }}
+  <span aria-hidden="true">{{ partial "icon.html" (dict "name" "arrow-right") }}</span>
+</article>
+{{- end -}}

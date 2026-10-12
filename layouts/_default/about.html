@@ -1,13 +1,49 @@
 {{ define "main" }}
+{{- $photo := resources.Get "images/denys-almazov.jpg" -}}
 <div class="container page-shell">
   {{ partial "breadcrumbs.html" . }}
-  <div class="about-layout">
-    <header class="page-header">
-      <p class="eyebrow">Викладач</p>
-      <h1>{{ .Title }}</h1>
-      <p class="lead">{{ .Description }}</p>
-    </header>
-    <article class="prose">{{ .Content }}</article>
+  <header class="about-hero">
+    <div class="about-hero__text">
+      <p class="eyebrow hero-in" style="--d:0">{{ .Title }}</p>
+      <h1 class="hero-in" style="--d:1">{{ site.Params.author }}</h1>
+      <p class="lead hero-in" style="--d:2">{{ .Description }}</p>
+      <div class="about-hero__tags hero-in" style="--d:3">
+        {{ range site.Data.subjects }}<span class="tag tag--{{ .color }}">{{ partial "icon.html" (dict "name" .icon) }}{{ .title }}</span>{{ end }}
+      </div>
+    </div>
+    {{ with $photo }}
+      {{ $img := .Fill "560x640 Center q86" }}
+      <figure class="about-hero__photo hero-in" style="--d:2">
+        <img src="{{ $img.RelPermalink }}" width="560" height="640" alt="{{ site.Params.authorFull }}">
+        <svg class="about-hero__doodle" viewBox="0 0 120 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path pathLength="1" d="M4 30 C24 6 40 36 60 18 C76 4 92 34 116 10"/></svg>
+      </figure>
+    {{ end }}
+  </header>
+
+  <div class="about-body">
+    <article class="prose" data-reveal>{{ .Content }}</article>
+    <aside class="about-aside" data-reveal style="--i:1">
+      <div class="side-card">
+        <h2>Напрями</h2>
+        <ul class="side-list">
+          {{ range site.Data.subjects }}
+            <li>
+              {{ if .link }}<a href="{{ .link | relURL }}">{{ else }}<span>{{ end }}
+                <span class="side-list__icon tag--{{ .color }}" aria-hidden="true">{{ partial "icon.html" (dict "name" .icon) }}</span>
+                <span><strong>{{ .title }}</strong><small>{{ .group }}{{ if .soon }} · скоро{{ end }}</small></span>
+              {{ if .link }}</a>{{ else }}</span>{{ end }}
+            </li>
+          {{ end }}
+        </ul>
+      </div>
+      {{ with site.GetPage "/courses" }}
+        <a class="side-card side-card--link" href="{{ .RelPermalink }}">
+          {{ partial "icon.html" (dict "name" "cap") }}
+          <span><strong>Перейти до курсів</strong><small>{{ len .Sections }} {{ partial "plural.html" (dict "n" (len .Sections) "one" "курс" "few" "курси" "many" "курсів") }} у відкритому доступі</small></span>
+          {{ partial "icon.html" (dict "name" "arrow-right") }}
+        </a>
+      {{ end }}
+    </aside>
   </div>
 </div>
 {{ end }}

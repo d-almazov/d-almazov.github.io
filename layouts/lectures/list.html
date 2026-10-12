@@ -7,15 +7,11 @@
       <header class="page-header page-header--compact">
         <p class="eyebrow">Матеріали курсу</p>
         <h1>{{ .Title }}</h1>
-        <p class="lead">{{ .Description }}</p>
+        {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
       </header>
+      {{ with .Content }}<div class="prose section-intro">{{ . }}</div>{{ end }}
       <div class="material-list">
-        {{ range .RegularPages.ByWeight }}
-          <article>
-            <span>{{ printf "%02d" .Weight }}</span>
-            <div><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Description }}</p></div>
-          </article>
-        {{ end }}
+        {{ range $i, $p := .RegularPages.ByWeight }}{{ partial "material-row.html" (dict "page" $p "i" (math.Min $i 6) "showTime" true) }}{{ end }}
       </div>
     </section>
   </div>

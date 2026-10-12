@@ -1,13 +1,14 @@
 .skip-link {
   position: fixed;
-  z-index: 10;
+  z-index: 100;
   top: 0.75rem;
   left: 0.75rem;
   padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
   transform: translateY(-180%);
   background: var(--text);
   color: var(--background);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .skip-link:focus {
@@ -15,14 +16,33 @@
 }
 
 .eyebrow {
-  margin-bottom: 0.8rem;
-  color: var(--accent);
-  font-size: 0.75rem;
-  font-weight: 750;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.9rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
+.eyebrow::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--text);
+}
+
+/* ---------- Icons ---------- */
+.icon {
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+  vertical-align: -0.15em;
+}
+
+/* ---------- Buttons ---------- */
 .button-group {
   display: flex;
   flex-wrap: wrap;
@@ -31,39 +51,118 @@
 
 .button {
   display: inline-flex;
-  min-height: 2.85rem;
+  min-height: 2.9rem;
   align-items: center;
   justify-content: center;
-  padding: 0.65rem 1.1rem;
-  border: 1px solid var(--accent);
-  font-weight: 700;
+  gap: 0.55rem;
+  padding: 0.65rem 1.25rem;
+  border: 1px solid var(--text);
+  border-radius: 999px;
+  font-size: 0.97rem;
+  font-weight: 550;
   text-decoration: none;
+  transition: transform 0.35s var(--ease-out), background-color 0.2s ease, color 0.2s ease, box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.button .icon {
+  transition: transform 0.35s var(--ease-out);
+}
+
+.button:hover .icon {
+  transform: translateX(3px);
 }
 
 .button--primary {
-  background: var(--accent);
+  background: var(--text);
   color: var(--background);
 }
 
 .button--primary:hover {
   background: var(--accent-strong);
   color: var(--background);
+  box-shadow: var(--shadow-lift);
 }
 
 .button--secondary {
-  color: var(--accent);
+  border-color: var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.button--secondary:hover {
+  border-color: var(--text);
+  color: var(--text);
 }
 
 .arrow-link {
-  display: inline-block;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text);
+  font-weight: 550;
   text-decoration: none;
 }
 
+.arrow-link span,
+.arrow-link .icon {
+  transition: transform 0.35s var(--ease-out);
+}
+
+.arrow-link:hover span,
+.arrow-link:hover .icon {
+  transform: translateX(4px);
+}
+
+/* ---------- Tags (Notion-style) ---------- */
+.tag {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 4px;
+  background: var(--tag-gray-bg);
+  color: var(--tag-gray-fg);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.tag--yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-fg); }
+.tag--orange { background: var(--tag-orange-bg); color: var(--tag-orange-fg); }
+.tag--blue   { background: var(--tag-blue-bg);   color: var(--tag-blue-fg); }
+.tag--green  { background: var(--tag-green-bg);  color: var(--tag-green-fg); }
+.tag--purple { background: var(--tag-purple-bg); color: var(--tag-purple-fg); }
+.tag--pink   { background: var(--tag-pink-bg);   color: var(--tag-pink-fg); }
+
+.status {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--faint);
+}
+
+.status--live::before { background: #3f9e6a; box-shadow: 0 0 0 3px color-mix(in srgb, #3f9e6a 22%, transparent); }
+.status--draft::before { background: #d9a43a; }
+
+/* ---------- Breadcrumbs ---------- */
 .breadcrumbs {
   overflow-x: auto;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   white-space: nowrap;
 }
 
@@ -78,53 +177,75 @@
 .breadcrumbs li + li::before {
   content: "/";
   padding-inline: 0.55rem;
-  color: var(--border);
+  color: var(--faint);
 }
 
 .breadcrumbs a {
   color: inherit;
+  text-decoration: none;
 }
 
+.breadcrumbs a:hover {
+  color: var(--text);
+}
+
+/* ---------- Course cards ---------- */
 .course-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px;
-  border: 1px solid var(--border);
-  background: var(--border);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  gap: 1rem;
 }
 
 .course-card {
+  position: relative;
   display: flex;
-  min-height: 22rem;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  min-height: 19rem;
+  padding: 1.6rem;
   flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   background: var(--surface);
+  transition: transform 0.45s var(--ease-out), box-shadow 0.45s var(--ease-out), border-color 0.3s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-lift);
+}
+
+.course-card__icon {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.4rem;
+  place-items: center;
+  border-radius: var(--radius);
+  background: var(--tag-gray-bg);
+  color: var(--tag-gray-fg);
+  font-size: 1.35rem;
+}
+
+.course-card__icon .icon { width: 1.4rem; height: 1.4rem; }
+.course-card__icon.tag--yellow, .course-card__icon.tag--orange, .course-card__icon.tag--blue,
+.course-card__icon.tag--green, .course-card__icon.tag--purple, .course-card__icon.tag--pink {
+  padding: 0;
 }
 
 .course-card__meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 3rem;
-  gap: 0.8rem;
+  margin-bottom: 0.9rem;
+  gap: 0.5rem 0.8rem;
   color: var(--muted);
-  font-size: 0.78rem;
-}
-
-.status {
-  display: inline-flex;
-  width: fit-content;
-  padding: 0.25rem 0.55rem;
-  align-items: center;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  font-size: 0.8rem;
 }
 
 .course-card h3 {
-  max-width: 22ch;
-  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  max-width: 24ch;
+  margin-bottom: 0.5rem;
+  font-size: clamp(1.25rem, 2.4vw, 1.5rem);
 }
 
 .course-card h3 a {
@@ -132,50 +253,91 @@
   text-decoration: none;
 }
 
+/* whole card clickable */
+.course-card h3 a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
 .course-card > p {
   max-width: 38rem;
+  margin-bottom: 0;
   color: var(--muted);
+  font-size: 0.97rem;
 }
 
 .course-card__footer {
   display: flex;
   margin-top: auto;
-  padding-top: 2rem;
+  padding-top: 1.5rem;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.6rem 1.2rem;
-  border-top: 1px solid var(--border);
+  gap: 0.5rem 1.1rem;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
+}
+
+.course-card__footer > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .course-card__footer .arrow-link {
   margin-left: auto;
-  color: var(--accent);
 }
 
+.course-card:hover .arrow-link .icon {
+  transform: translateX(4px);
+}
+
+/* ---------- Notes list (Notion page rows) ---------- */
 .notes-list {
   border-top: 1px solid var(--border);
 }
 
 .note-row {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(9rem, 0.3fr) minmax(0, 1fr) auto;
-  padding-block: 1.5rem;
-  align-items: start;
-  gap: 1.5rem;
+  grid-template-columns: auto minmax(0, 1fr) minmax(8rem, auto) auto;
+  padding: 1.15rem 0.75rem;
+  align-items: center;
+  gap: 1.1rem;
   border-bottom: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s ease;
+}
+
+.note-row:hover {
+  background: var(--surface-hover);
+}
+
+.note-row__icon {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  color: var(--muted);
 }
 
 .note-row time {
   color: var(--muted);
-  font-size: 0.83rem;
+  font-size: 0.84rem;
+  text-align: right;
 }
 
 .note-row h2,
 .note-row h3 {
-  margin-bottom: 0.3rem;
-  font-size: 1.15rem;
+  margin-bottom: 0.15rem;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .note-row h2 a,
@@ -184,9 +346,27 @@
   text-decoration: none;
 }
 
+.note-row h2 a::after,
+.note-row h3 a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
 .note-row p {
   margin: 0;
   color: var(--muted);
+  font-size: 0.93rem;
+}
+
+.note-row > span[aria-hidden] {
+  color: var(--faint);
+  transition: transform 0.35s var(--ease-out), color 0.2s ease;
+}
+
+.note-row:hover > span[aria-hidden] {
+  color: var(--text);
+  transform: translateX(4px);
 }
 
 .section-intro {
@@ -195,20 +375,19 @@
 }
 
 @media (max-width: 42rem) {
-  .course-grid {
-    grid-template-columns: 1fr;
-  }
-
   .course-card {
-    min-height: 19rem;
+    min-height: 17rem;
   }
 
   .note-row {
-    grid-template-columns: 1fr auto;
-    gap: 0.5rem 1rem;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.4rem 0.9rem;
+    padding-inline: 0.25rem;
   }
 
   .note-row time {
-    grid-column: 1 / -1;
+    grid-column: 2;
+    grid-row: 2;
+    text-align: left;
   }
 }

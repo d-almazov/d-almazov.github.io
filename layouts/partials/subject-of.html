@@ -1,0 +1,5 @@
+{{- /* Returns the subject entry (data/subjects.yaml) for a course page, or an empty dict. */ -}}
+{{- $subject := dict "color" "gray" "icon" "book" -}}
+{{- $key := .Params.subject -}}
+{{- range site.Data.subjects -}}{{- if eq .key $key -}}{{- $subject = . -}}{{- end -}}{{- end -}}
+{{- return $subject -}}

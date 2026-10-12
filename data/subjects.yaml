@@ -1,0 +1,43 @@
+# Напрями викладання. color: yellow | orange | pink | blue | green | purple | gray
+- key: python
+  group: "Основи програмування"
+  title: "Python"
+  color: yellow
+  icon: code
+  description: "Перші програми, алгоритмічне мислення, функції та робота з даними."
+  link: "/courses/python/"
+- key: matlab
+  group: "Основи програмування"
+  title: "MATLAB"
+  color: orange
+  icon: chart
+  description: "Обчислення, матриці, графіки та скрипти для інженерних задач."
+  link: "/courses/control-systems/lectures/01-matlab-basics/"
+- key: simulink
+  group: "Основи програмування"
+  title: "Simulink"
+  color: pink
+  icon: workflow
+  description: "Блокові моделі динамічних систем і візуальне моделювання."
+  link: "/courses/control-systems/lectures/02-simulink-basics/"
+- key: control
+  group: "Системи керування"
+  title: "Теорія автоматичного керування"
+  color: blue
+  icon: activity
+  description: "Моделі, стійкість, частотний аналіз і проєктування ПІД-регуляторів."
+  link: "/courses/control-systems/"
+- key: automation
+  group: "Промислова автоматизація"
+  title: "ПЛК та SCADA"
+  color: green
+  icon: factory
+  description: "Програмовані логічні контролери, датчики, виконавчі механізми та HMI."
+  soon: true
+- key: embedded
+  group: "Вбудовані системи"
+  title: "Мікроконтролери"
+  color: purple
+  icon: cpu
+  description: "Arduino та ESP32: GPIO, таймери, АЦП, ШІМ і зв'язок із периферією."
+  soon: true

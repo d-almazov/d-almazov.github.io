@@ -1,61 +1,96 @@
 {{ define "main" }}
 {{ if .Parent.IsHome }}
+  {{- /* ================= Course catalogue ================= */ -}}
+  {{- $courses := .Sections.ByWeight -}}
+  {{- $groups := slice -}}
+  {{- range site.Data.subjects }}{{ if not (in $groups .group) }}{{ $groups = $groups | append .group }}{{ end }}{{ end -}}
   <div class="container page-shell">
     {{ partial "breadcrumbs.html" . }}
-    <header class="page-header page-header--compact">
-      <p class="eyebrow">Каталог</p>
-      <h1>{{ .Title }}</h1>
-      <p class="lead">{{ .Description }}</p>
+    <header class="page-header page-header--compact page-header--split">
+      <div>
+        <p class="eyebrow">Каталог</p>
+        <h1>{{ .Title }}</h1>
+        <p class="lead">{{ .Description }}</p>
+      </div>
     </header>
-    <div class="prose section-intro">{{ .Content }}</div>
-    <div class="course-grid">
-      {{ range .Sections.ByWeight }}{{ partial "course-card.html" . }}{{ end }}
+    {{ with .Content }}<div class="prose section-intro">{{ . }}</div>{{ end }}
+
+    <div class="filter-bar" role="toolbar" aria-label="Фільтр за напрямом" data-filter-bar>
+      <button type="button" class="filter-chip" aria-pressed="true" data-filter="all">Усі</button>
+      {{ range $groups }}<button type="button" class="filter-chip" aria-pressed="false" data-filter="{{ . | urlize }}">{{ . }}</button>{{ end }}
     </div>
+
+    <div class="course-grid" data-filter-list>
+      {{ range $courses }}{{ partial "course-card.html" . }}{{ end }}
+      {{ range site.Data.subjects }}
+        {{ if .soon }}
+          <article class="course-card course-card--soon" data-reveal data-group="{{ .group | urlize }}">
+            <span class="course-card__icon tag--{{ .color }}" aria-hidden="true">{{ partial "icon.html" (dict "name" .icon) }}</span>
+            <div class="course-card__meta"><span class="tag tag--{{ .color }}">{{ .group }}</span><span class="status status--draft">Готується</span></div>
+            <h3>{{ .title }}</h3>
+            <p>{{ .description }}</p>
+            <div class="course-card__footer"><span>Курс з'явиться згодом</span></div>
+          </article>
+        {{ end }}
+      {{ end }}
+    </div>
+    <p class="filter-empty" data-filter-empty hidden>За цим напрямом курсів поки немає.</p>
   </div>
+
 {{ else if .Params.level }}
+  {{- /* ================= Course overview ================= */ -}}
+  {{- $subject := partial "subject-of.html" . -}}
+  {{- $lectures := .GetPage "lectures" -}}
+  {{- $assignments := .GetPage "assignments" -}}
+  {{- $status := .Params.status | default "Доступний" -}}
   <div class="container page-shell">
     {{ partial "breadcrumbs.html" . }}
     <div class="course-layout">
       {{ partial "course-navigation.html" . }}
       <article class="course-main">
         <header class="course-hero">
-          <div>
-            <p class="eyebrow">Навчальний курс</p>
-            <h1>{{ .Title }}</h1>
-            <p class="lead">{{ .Description }}</p>
+          <span class="course-hero__icon tag--{{ $subject.color }}" aria-hidden="true">{{ partial "icon.html" (dict "name" $subject.icon "stroke" 1.6) }}</span>
+          <div class="course-hero__meta">
+            {{ with $subject.group }}<span class="tag tag--{{ $subject.color }}">{{ . }}</span>{{ end }}
+            <span class="status{{ if eq $status "Доступний" }} status--live{{ else }} status--draft{{ end }}">{{ $status }}</span>
           </div>
-          <span class="status status--large">{{ .Params.status }}</span>
+          <h1>{{ .Title }}</h1>
+          <p class="lead">{{ .Description }}</p>
         </header>
-        <dl class="course-facts">
-          <div><dt>Викладач</dt><dd>{{ .Params.instructor }}</dd></div>
-          <div><dt>Рівень</dt><dd>{{ .Params.level }}</dd></div>
-          <div><dt>Тривалість</dt><dd>{{ .Params.duration }}</dd></div>
-          <div><dt>Семестр</dt><dd>{{ .Params.semester }}</dd></div>
+
+        <dl class="props">
+          {{ with .Params.instructor }}<div><dt>{{ partial "icon.html" (dict "name" "user") }}Викладач</dt><dd>{{ . }}</dd></div>{{ end }}
+          {{ with .Params.level }}<div><dt>{{ partial "icon.html" (dict "name" "signal") }}Рівень</dt><dd>{{ . }}</dd></div>{{ end }}
+          {{ with .Params.duration }}<div><dt>{{ partial "icon.html" (dict "name" "clock") }}Тривалість</dt><dd>{{ . }}</dd></div>{{ end }}
+          {{ with .Params.semester }}<div><dt>{{ partial "icon.html" (dict "name" "calendar") }}Формат</dt><dd>{{ . }}</dd></div>{{ end }}
         </dl>
+
+        <nav class="quick-links" aria-label="Матеріали курсу">
+          {{ with .GetPage "syllabus" }}<a href="{{ .RelPermalink }}">{{ partial "icon.html" (dict "name" "compass") }}<strong>Силабус</strong><small>Мета, структура, оцінювання</small></a>{{ end }}
+          {{ with $lectures }}{{ $n := len .RegularPages }}<a href="{{ .RelPermalink }}">{{ partial "icon.html" (dict "name" "book") }}<strong>Лекції</strong><small>{{ $n }} {{ partial "plural.html" (dict "n" $n "one" "лекція" "few" "лекції" "many" "лекцій") }}</small></a>{{ end }}
+          {{ with $assignments }}{{ $n := len .RegularPages }}<a href="{{ .RelPermalink }}">{{ partial "icon.html" (dict "name" "check") }}<strong>Завдання</strong><small>{{ $n }} {{ partial "plural.html" (dict "n" $n "one" "завдання" "few" "завдання" "many" "завдань") }}</small></a>{{ end }}
+          {{ with .GetPage "resources" }}<a href="{{ .RelPermalink }}">{{ partial "icon.html" (dict "name" "link") }}<strong>Ресурси</strong><small>Література й посилання</small></a>{{ end }}
+        </nav>
+
         <div class="prose">{{ .Content }}</div>
-        {{ with .GetPage "lectures" }}
+
+        {{ with $lectures }}
           <section class="course-outline" aria-labelledby="outline-title">
             <div class="section-heading">
               <h2 id="outline-title">Лекції курсу</h2>
-              <a class="arrow-link" href="{{ .RelPermalink }}">Переглянути всі <span aria-hidden="true">→</span></a>
+              <a class="arrow-link" href="{{ .RelPermalink }}">Усі лекції {{ partial "icon.html" (dict "name" "arrow-right") }}</a>
             </div>
-            <ol>
-              {{ range .RegularPages.ByWeight }}
-                <li>
-                  <a href="{{ .RelPermalink }}">
-                    <span>{{ printf "%02d" .Weight }}</span>
-                    <strong>{{ .Title }}</strong>
-                    <small>{{ .Description }}</small>
-                  </a>
-                </li>
-              {{ end }}
-            </ol>
+            <div class="material-list">
+              {{ range $i, $p := .RegularPages.ByWeight }}{{ partial "material-row.html" (dict "page" $p "i" (math.Min $i 6) "showTime" true) }}{{ end }}
+            </div>
           </section>
         {{ end }}
       </article>
     </div>
   </div>
+
 {{ else }}
+  {{- /* ================= Generic course subsection ================= */ -}}
   <div class="container page-shell">
     {{ partial "breadcrumbs.html" . }}
     <div class="course-layout">
@@ -64,19 +99,10 @@
         <header class="page-header page-header--compact">
           <p class="eyebrow">Матеріали курсу</p>
           <h1>{{ .Title }}</h1>
-          <p class="lead">{{ .Description }}</p>
+          {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
         </header>
         <div class="material-list">
-          {{ range .RegularPages.ByWeight }}
-            <article>
-              <span>{{ printf "%02d" .Weight }}</span>
-              <div>
-                <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-                <p>{{ .Description }}</p>
-                {{ with .Params.due }}<small>{{ . }}</small>{{ end }}
-              </div>
-            </article>
-          {{ end }}
+          {{ range $i, $p := .RegularPages.ByWeight }}{{ partial "material-row.html" (dict "page" $p "i" (math.Min $i 6)) }}{{ end }}
         </div>
       </section>
     </div>

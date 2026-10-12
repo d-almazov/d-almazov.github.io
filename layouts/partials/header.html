@@ -1,15 +1,15 @@
-<header class="site-header">
+<header class="site-header" data-header>
   <div class="container header-inner">
-    <a class="site-brand" href="{{ site.Home.RelPermalink }}" aria-label="Особистий університет — головна">
-      <span class="brand-mark" aria-hidden="true">ОУ</span>
+    <a class="site-brand" href="{{ site.Home.RelPermalink }}" aria-label="{{ site.Title }} — головна">
+      <span class="brand-mark" aria-hidden="true">ДА</span>
       <span>{{ site.Title }}</span>
     </a>
     <div class="header-actions">
       {{ partial "main-navigation.html" . }}
-      <label class="theme-toggle">
-        <input type="checkbox" data-theme-toggle aria-label="Перемкнути тему">
-        <span class="theme-toggle__track" aria-hidden="true"></span>
-      </label>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Перемкнути тему">
+        {{ partial "icon.html" (dict "name" "sun" "class" "icon-sun") }}
+        {{ partial "icon.html" (dict "name" "moon" "class" "icon-moon") }}
+      </button>
     </div>
   </div>
 </header>

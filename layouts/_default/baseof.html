@@ -15,19 +15,29 @@
   <meta property="og:locale" content="uk_UA">
   <meta property="og:site_name" content="{{ site.Title }}">
   <meta name="twitter:card" content="summary">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#191919" media="(prefers-color-scheme: dark)">
+  <link rel="preload" href="{{ "fonts/onest-cyrillic-400-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ "fonts/unbounded-cyrillic-600-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
   {{- $css := slice
+    (resources.Get "css/fonts.css")
     (resources.Get "css/typography.css")
     (resources.Get "css/layout.css")
     (resources.Get "css/components.css")
+    (resources.Get "css/home.css")
     (resources.Get "css/course.css")
     (resources.Get "css/exercises.css")
+    (resources.Get "css/syntax.css")
     | resources.Concat "css/site.css"
     | minify
     | fingerprint -}}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   <script>
     (() => {
-      const stored = localStorage.getItem("theme");
+      document.documentElement.classList.add("js");
+      let stored = null;
+      try { stored = localStorage.getItem("theme"); } catch (e) {}
       const theme = stored === "light" || stored === "dark"
         ? stored
         : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
@@ -49,6 +59,8 @@
   {{ partial "footer.html" . }}
   {{- $themeScript := resources.Get "js/theme-toggle.js" | minify | fingerprint -}}
   <script src="{{ $themeScript.RelPermalink }}" integrity="{{ $themeScript.Data.Integrity }}" defer></script>
+  {{- $motionScript := resources.Get "js/motion.js" | minify | fingerprint -}}
+  <script src="{{ $motionScript.RelPermalink }}" integrity="{{ $motionScript.Data.Integrity }}" defer></script>
   {{- if .Store.Get "hasPythonExercise" }}
     {{- $exerciseScript := resources.Get "js/python-exercises.js" | minify | fingerprint -}}
     <script src="{{ $exerciseScript.RelPermalink }}" integrity="{{ $exerciseScript.Data.Integrity }}" defer></script>

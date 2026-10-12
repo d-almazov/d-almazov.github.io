@@ -4,9 +4,10 @@ shortTitle: "Автоматичне керування"
 description: "Моделювання, аналіз і проєктування систем керування у MATLAB та Simulink."
 level: "Базовий — середній"
 duration: "12 тижнів"
-instructor: "Ім'я Прізвище"
+instructor: "Денис Алмазов"
 semester: "Самостійне навчання"
 status: "Чернетка"
+subject: "control"
 weight: 30
 featured: true
 ---

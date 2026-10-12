@@ -4,7 +4,7 @@ shortTitle: "Коротка назва"
 description: "Короткий опис курсу."
 level: "Початковий"
 duration: "10 тижнів"
-instructor: "Ім'я Прізвище"
+instructor: "Денис Алмазов"
 semester: "Семестр 2026"
 status: "У розробці"
 weight: 10

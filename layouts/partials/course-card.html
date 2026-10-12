@@ -1,15 +1,20 @@
 {{- $course := . -}}
 {{- $lectures := $course.GetPage "lectures" -}}
-<article class="course-card">
+{{- $subject := partial "subject-of.html" $course -}}
+{{- $color := $subject.color | default "gray" -}}
+{{- $status := $course.Params.status | default "Доступний" -}}
+<article class="course-card" data-reveal data-group="{{ with $subject.group }}{{ . | urlize }}{{ end }}">
+  <span class="course-card__icon tag--{{ $color }}" aria-hidden="true">{{ partial "icon.html" (dict "name" ($subject.icon | default "book")) }}</span>
   <div class="course-card__meta">
-    <span class="status">{{ $course.Params.status | default "Доступний" }}</span>
-    {{ with $course.Params.level }}<span>{{ . }}</span>{{ end }}
+    {{ with $subject.group }}<span class="tag tag--{{ $color }}">{{ . }}</span>{{ end }}
+    <span class="status{{ if eq $status "Доступний" }} status--live{{ else }} status--draft{{ end }}">{{ $status }}</span>
   </div>
   <h3><a href="{{ $course.RelPermalink }}">{{ $course.Title }}</a></h3>
   <p>{{ $course.Description }}</p>
   <div class="course-card__footer">
-    {{ with $lectures }}<span>{{ len .RegularPages }} {{ if eq (len .RegularPages) 1 }}лекція{{ else }}лекцій{{ end }}</span>{{ end }}
-    {{ with $course.Params.duration }}<span>{{ . }}</span>{{ end }}
-    <a class="arrow-link" href="{{ $course.RelPermalink }}">До курсу <span aria-hidden="true">→</span></a>
+    {{ with $lectures }}{{ $n := len .RegularPages }}<span>{{ partial "icon.html" (dict "name" "book") }}{{ $n }} {{ partial "plural.html" (dict "n" $n "one" "лекція" "few" "лекції" "many" "лекцій") }}</span>{{ end }}
+    {{ with $course.Params.duration }}<span>{{ partial "icon.html" (dict "name" "clock") }}{{ . }}</span>{{ end }}
+    {{ with $course.Params.level }}<span>{{ partial "icon.html" (dict "name" "signal") }}{{ . }}</span>{{ end }}
+    <span class="arrow-link" aria-hidden="true">{{ partial "icon.html" (dict "name" "arrow-right") }}</span>
   </div>
 </article>

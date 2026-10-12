@@ -1,13 +1,20 @@
 {{ define "main" }}
 <div class="container page-shell">
   {{ partial "breadcrumbs.html" . }}
-  <article class="prose page-article">
-    <header class="page-header">
-      <p class="eyebrow">Особистий університет</p>
+  <article class="page-article">
+    <header class="article-header">
+      <div class="article-header__meta">
+        {{ with .Parent }}{{ if not .IsHome }}<span class="tag">{{ partial "icon.html" (dict "name" "file") }}{{ .Title }}</span>{{ end }}{{ end }}
+        {{ if not .Date.IsZero }}<span class="article-header__time">{{ partial "icon.html" (dict "name" "calendar") }}{{ .Date | time.Format ":date_long" }}</span>{{ end }}
+        <span class="article-header__time">{{ partial "icon.html" (dict "name" "clock") }}{{ .ReadingTime }} хв читання</span>
+      </div>
       <h1>{{ .Title }}</h1>
       {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
     </header>
-    {{ .Content }}
+    <div class="prose">{{ .Content }}</div>
+    {{ if .Parent }}{{ if not .Parent.IsHome }}
+      <p class="back-link"><a class="arrow-link" href="{{ .Parent.RelPermalink }}">{{ partial "icon.html" (dict "name" "chevron-left") }}До розділу «{{ .Parent.Title }}»</a></p>
+    {{ end }}{{ end }}
   </article>
 </div>
 {{ end }}

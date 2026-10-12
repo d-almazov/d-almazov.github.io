@@ -1,0 +1,19 @@
+{{- /* Header for lecture / assignment / course material pages. */ -}}
+{{- $page := .page -}}
+{{- $course := partial "course-of.html" $page -}}
+{{- $subject := partial "subject-of.html" $course -}}
+<header class="article-header">
+  <div class="article-header__meta">
+    <span class="tag tag--{{ $subject.color }}">{{ partial "icon.html" (dict "name" (.icon | default $subject.icon)) }}{{ .label }}</span>
+    {{ with $page.Params.due }}<span class="tag tag--orange">{{ partial "icon.html" (dict "name" "calendar") }}{{ . }}</span>{{ end }}
+    <span class="article-header__time">{{ partial "icon.html" (dict "name" "clock") }}{{ $page.ReadingTime }} хв читання</span>
+  </div>
+  <h1>{{ $page.Title }}</h1>
+  {{ with $page.Description }}<p class="lead">{{ . }}</p>{{ end }}
+</header>
+{{- with $page.Fragments -}}{{- if ge (len .Identifiers) 3 -}}
+<details class="toc">
+  <summary>{{ partial "icon.html" (dict "name" "chevron-right" "class" "toc__chevron") }}Зміст сторінки</summary>
+  {{ $page.TableOfContents }}
+</details>
+{{- end -}}{{- end -}}

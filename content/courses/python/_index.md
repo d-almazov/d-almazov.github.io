@@ -4,9 +4,10 @@ shortTitle: "Python"
 description: "Вступний курс із програмування мовою Python."
 level: "Початковий"
 duration: "10 тижнів"
-instructor: "Ім'я Прізвище"
+instructor: "Денис Алмазов"
 semester: "Весна 2026"
-status: "Доступний"
+status: "Чернетка"
+subject: "python"
 weight: 10
 featured: true
 ---
