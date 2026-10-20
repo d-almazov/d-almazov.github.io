@@ -91,10 +91,12 @@ $$
 Його розв'язок — косинусоїда:
 
 $$
-x(t) = A\cos(\omega t + \varphi), \qquad
+\begin{gathered}
+x(t) = A\cos(\omega t + \varphi), \\
 \omega = \sqrt{\frac{k}{m}}, \quad
 A = \frac{1}{\sqrt{km}}, \quad
 \varphi = \frac{\pi}{2}.
+\end{gathered}
 $$
 
 - **Частота** $\omega$ залежить від жорсткості пружини і маси.
@@ -142,7 +144,7 @@ $$
 Беремо перетворення Фур'є від інтеграла згортки:
 
 $$
-\mathcal{F}\{f*g\} = \int \left[ \int f(\tau)\,g(t-\tau)\,d\tau \right] e^{-j\omega t}\,dt.
+\begin{aligned}\mathcal{F}\{f*g\} = \int \left[ \int f(\tau)\,g(t-\tau)\,d\tau \right] \\ \cdot\, e^{-j\omega t}\,dt.\end{aligned}
 $$
 
 **Крок 1.** Міняємо порядок інтегрування:
@@ -220,8 +222,10 @@ $\omega = \sqrt{k/m} = \sqrt{8/2} = 2$ рад/с, $A = 1/\sqrt{km} = 1/\sqrt{16}
 Дискретне перетворення Фур'є (ДПФ) — це те саме перетворення для послідовності з $N$ чисел:
 
 $$
-X_k = \sum_{n=0}^{N-1} x_n\,e^{-j 2\pi k n / N}, \qquad
+\begin{gathered}
+X_k = \sum_{n=0}^{N-1} x_n\,e^{-j 2\pi k n / N}, \\
 x_n = \frac{1}{N}\sum_{k=0}^{N-1} X_k\,e^{j 2\pi k n / N}.
+\end{gathered}
 $$
 
 Візьміть коефіцієнти многочленів з уроку 7, $[1\ 2\ 3]$ і $[3\ 0\ 1]$, доповнені нулями до довжини 8. Порахуйте їхні ДПФ, перемножте поелементно і поверніться назад оберненим ДПФ. Чи вийде згортка $[3\ 6\ 10\ 2\ 3]$?

@@ -320,3 +320,9 @@
   .quiz__explain { margin-left: 0; }
   .lesson-video__icon { width: 3.5rem; height: 3.5rem; }
 }
+
+.task-answer__body mjx-container[display="true"],
+.quiz mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
