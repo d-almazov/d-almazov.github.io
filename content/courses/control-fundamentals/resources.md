@@ -6,7 +6,7 @@ weight: 40
 
 ## Першоджерело
 
-Курс побудовано за книгою **Brian Douglas. *The Fundamentals of Control Theory: An Intuitive Approach from the Creator of Control System Lectures on YouTube*. Revision 1.6, 2019.** Книга поширюється безкоштовно на сайті автора: [engineeringmediallc.com](https://www.engineeringmediallc.com).
+Курс побудовано за книгою **Brian Douglas. *The Fundamentals of Control Theory: An Intuitive Approach from the Creator of Control System Lectures on YouTube*. Revision 1.6, 2019.** Книга поширюється безкоштовно на сайті автора: [engineeringmedia.com/books](https://engineeringmedia.com/books).
 
 Відповідність уроків розділам книги:
 
