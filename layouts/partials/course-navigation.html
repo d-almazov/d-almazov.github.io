@@ -25,7 +25,7 @@
               <details class="course-nav__group"{{ if or $inLectures (eq $current $course) }} open{{ end }}>
                 <summary>
                   {{ partial "icon.html" (dict "name" "chevron-right" "class" "course-nav__toggle") }}
-                  <a href="{{ .RelPermalink }}"{{ if eq $current . }} aria-current="page"{{ end }}>{{ partial "icon.html" (dict "name" "book") }}Лекції<span class="course-nav__count">{{ len .RegularPages }}</span></a>
+                  <a href="{{ .RelPermalink }}"{{ if eq $current . }} aria-current="page"{{ end }}>{{ partial "icon.html" (dict "name" "book") }}{{ .Title }}<span class="course-nav__count">{{ len .RegularPages }}</span></a>
                 </summary>
                 <ol class="course-nav__lessons">
                   {{ range .RegularPages.ByWeight }}

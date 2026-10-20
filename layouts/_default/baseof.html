@@ -39,6 +39,7 @@
     (resources.Get "css/home.css")
     (resources.Get "css/course.css")
     (resources.Get "css/exercises.css")
+    (resources.Get "css/lesson.css")
     (resources.Get "css/syntax.css")
     | resources.Concat "css/site.css"
     | minify
@@ -72,6 +73,10 @@
   <script src="{{ $themeScript.RelPermalink }}" integrity="{{ $themeScript.Data.Integrity }}" defer></script>
   {{- $motionScript := resources.Get "js/motion.js" | minify | fingerprint -}}
   <script src="{{ $motionScript.RelPermalink }}" integrity="{{ $motionScript.Data.Integrity }}" defer></script>
+  {{- if .Store.Get "hasLessonScript" }}
+    {{- $lessonScript := resources.Get "js/lesson.js" | minify | fingerprint -}}
+    <script src="{{ $lessonScript.RelPermalink }}" integrity="{{ $lessonScript.Data.Integrity }}" defer></script>
+  {{- end }}
   {{- if .Store.Get "hasPythonExercise" }}
     {{- $exerciseScript := resources.Get "js/python-exercises.js" | minify | fingerprint -}}
     <script src="{{ $exerciseScript.RelPermalink }}" integrity="{{ $exerciseScript.Data.Integrity }}" defer></script>

@@ -1,0 +1,27 @@
+{{- /*
+  Video block at the top of a lesson. Front matter:
+    youtube: "VIDEO_ID"      # empty → placeholder "відео незабаром"
+    videoDuration: "5:54"    # optional, shown in the caption
+  A page resource named poster.* is used as the preview image.
+  The YouTube player is loaded only after the click (youtube-nocookie.com).
+*/ -}}
+{{- $page := . -}}
+{{- $id := $page.Params.youtube | default "" -}}
+{{- $poster := $page.Resources.GetMatch "poster.*" -}}
+{{- $page.Store.Set "hasLessonScript" true -}}
+<figure class="lesson-video">
+  <div class="lesson-video__frame{{ if not $id }} lesson-video__frame--pending{{ end }}"{{ with $id }} data-youtube="{{ . }}"{{ end }}>
+    {{- with $poster }}<img class="lesson-video__poster" src="{{ .RelPermalink }}" alt="" width="1280" height="720" loading="eager">{{ end }}
+    {{- if $id }}
+      <button class="lesson-video__play" type="button" data-video-play aria-label="Відтворити відеоурок «{{ $page.Title }}»">
+        <span class="lesson-video__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
+      </button>
+    {{- else }}
+      <span class="lesson-video__badge">Відео незабаром з'явиться</span>
+    {{- end }}
+  </div>
+  <figcaption class="lesson-video__caption">
+    <span>{{ partial "icon.html" (dict "name" "eye") }}Відеоурок{{ with $page.Params.videoDuration }} · {{ . }}{{ end }}</span>
+    {{- with $id }}<a class="arrow-link" href="https://www.youtube.com/watch?v={{ . }}" target="_blank" rel="noopener">Дивитися на YouTube{{ partial "icon.html" (dict "name" "arrow-up-right") }}</a>{{ end }}
+  </figcaption>
+</figure>

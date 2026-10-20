@@ -1,0 +1,58 @@
+{{- /*
+  Self-check quiz built from the page front matter:
+
+  quiz:
+    - q: "Питання (Markdown і $формули$ дозволені)"
+      options:
+        - "Варіант 1"
+        - "Варіант 2"
+      answer: 2            # номер правильного варіанта, починаючи з 1
+      explain: "Пояснення, яке з'являється після відповіді"
+
+  Usage in the Markdown body: {{< quiz >}}  or  {{< quiz title="Перевірте себе" >}}
+  Without JavaScript every question shows a collapsible answer.
+*/ -}}
+{{- $page := .Page -}}
+{{- $items := $page.Params.quiz -}}
+{{- if not $items }}{{ errorf "Shortcode quiz: no `quiz` list in front matter of %s" $page.File.Path }}{{ end -}}
+{{- $page.Store.Set "hasLessonScript" true -}}
+{{- $uid := printf "quiz-%s" (substr (md5 $page.File.Path) 0 6) -}}
+{{- $n := len $items -}}
+<section class="quiz" id="{{ $uid }}" data-quiz aria-label="Самоперевірка">
+  <header class="quiz__header">
+    <p class="eyebrow">Самоперевірка</p>
+    <p class="quiz__lead">{{ .Get "title" | default (printf "%d %s. Оберіть відповідь — пояснення з'явиться одразу." $n (partial "plural.html" (dict "n" $n "one" "питання" "few" "питання" "many" "питань"))) }}</p>
+  </header>
+  <ol class="quiz__list">
+    {{- range $i, $q := $items }}
+    {{- $answer := int $q.answer -}}
+    {{- if or (lt $answer 1) (gt $answer (len $q.options)) }}{{ errorf "Shortcode quiz: question %d in %s has answer %d out of range" (add $i 1) $page.File.Path $answer }}{{ end }}
+    <li class="quiz__item" data-quiz-item data-answer="{{ $answer }}">
+      <fieldset class="quiz__fieldset">
+        <legend class="quiz__question"><span class="quiz__num">{{ add $i 1 }}</span><span>{{ $page.RenderString $q.q }}</span></legend>
+        <div class="quiz__options">
+          {{- range $j, $o := $q.options }}
+          <label class="quiz__option">
+            <input type="radio" name="{{ $uid }}-{{ $i }}" value="{{ add $j 1 }}">
+            <span class="quiz__mark" aria-hidden="true"></span>
+            <span class="quiz__text">{{ $page.RenderString $o }}</span>
+          </label>
+          {{- end }}
+        </div>
+      </fieldset>
+      <p class="quiz__verdict" data-verdict role="status" aria-live="polite"></p>
+      <details class="quiz__explain" data-explain>
+        <summary>Відповідь і пояснення</summary>
+        <div class="quiz__explain-body">
+          <p><strong>Правильна відповідь:</strong> {{ $page.RenderString (index $q.options (sub $answer 1)) }}</p>
+          {{ with $q.explain }}{{ $page.RenderString (dict "display" "block") . }}{{ end }}
+        </div>
+      </details>
+    </li>
+    {{- end }}
+  </ol>
+  <footer class="quiz__footer">
+    <p class="quiz__score" data-quiz-score aria-live="polite">Відповіли на 0 з {{ $n }}</p>
+    <button class="button button--secondary quiz__reset" type="button" data-quiz-reset>Пройти ще раз</button>
+  </footer>
+</section>

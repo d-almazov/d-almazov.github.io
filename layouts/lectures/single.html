@@ -4,7 +4,8 @@
   <div class="course-layout">
     {{ partial "course-navigation.html" . }}
     <article class="course-main">
-      {{ partial "article-header.html" (dict "page" . "label" (printf "Лекція %02d" .Weight) "icon" "book") }}
+      {{ partial "article-header.html" (dict "page" . "label" (printf "%s %02d" (.Params.lessonLabel | default "Лекція") .Weight) "icon" "book") }}
+      {{- if isset .Params "youtube" }}{{ partial "lesson-video.html" . }}{{ end }}
       <div class="prose">{{ .Content }}</div>
       {{ partial "pagination.html" . }}
     </article>

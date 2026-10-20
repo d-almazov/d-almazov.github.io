@@ -1,0 +1,11 @@
+{{- /*
+  Collapsible answer for a practice task.
+  {{< answer >}} … Markdown … {{< /answer >}}
+  {{< answer title="Розв'язання" >}} … {{< /answer >}}
+*/ -}}
+<details class="task-answer">
+  <summary>{{ .Get "title" | default "Показати відповідь" }}</summary>
+  <div class="task-answer__body">
+    {{ .InnerDeindent | .Page.RenderString (dict "display" "block") }}
+  </div>
+</details>
